@@ -82,15 +82,18 @@ class MT_32bits_Recover:
         self.state = res
         self.setstate()
 
+        for i in range(624, len(outputs)):
+            assert outputs[i] == self.rand()
+
 # test
 if __name__ == "__main__":    
     import random
     mtr = MT_32bits_Recover()
     r = random.Random(0x31337)
 
-    # [r.getrandbits(32) for _ in range(1234)]
+    [r.getrandbits(32) for _ in range(1111)]
 
-    n = [r.getrandbits(32) for _ in range(624)]
+    n = [r.getrandbits(32) for _ in range(1234)]
     mtr.recover(n)
 
     assert r.getrandbits(32) == mtr.rand()
