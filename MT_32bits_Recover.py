@@ -67,23 +67,22 @@ class MT_32bits_Recover:
         res = 0
         for i in outputs:
             values.append(self.untemper(i))
-        
+
         if len(outputs) > 624:
             challenge = outputs[624]
-            for i in range(1, 626):
-                self.state = values[:i]
-                self.setstate
+            for i in range(0, 625):
+                res = values[i:i+624]
+                self.state = res
+                self.setstate()
                 if challenge == self.rand():
-                    res = values
+                    print(i)
                     break
         else:
-            res = values
-
-        self.state = res
-        self.setstate()
-
-        for i in range(624, len(outputs)):
-            assert outputs[i] == self.rand()
+            self.state = values
+            self.setstate()
+        for i in range(625, len(outputs)):
+            x = self.rand()
+            assert outputs[i] == x
 
 # test
 if __name__ == "__main__":    
@@ -91,9 +90,9 @@ if __name__ == "__main__":
     mtr = MT_32bits_Recover()
     r = random.Random(0x31337)
 
-    [r.getrandbits(32) for _ in range(1111)]
+    [r.getrandbits(32) for _ in range(3456)]
 
-    n = [r.getrandbits(32) for _ in range(1234)]
+    n = [r.getrandbits(32) for _ in range(1000)]
     mtr.recover(n)
 
     assert r.getrandbits(32) == mtr.rand()
